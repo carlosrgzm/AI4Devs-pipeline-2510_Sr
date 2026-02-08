@@ -1,6 +1,11 @@
 name: Backend Pipeline
 
 on:
+  push:
+    branches:
+      - pipelines-crm
+      - main
+      - master
   pull_request:
     branches:
       - main
