@@ -92,6 +92,19 @@ jobs:
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Prepare deploy folder
+        if: steps.check-secrets.outputs.skip != 'true'
+        run: |
+          if [ -d deploy ]; then
+            echo "deploy/ exists"
+          elif [ -d backend-build/deploy ]; then
+            cp -r backend-build/deploy ./
+          elif [ -d dist ]; then
+            mkdir -p deploy && mv dist package.json package-lock.json prisma deploy/
+          else
+            echo "Contents:" && ls -la && exit 1
+          fi
+
       - name: Setup SSH key
         if: steps.check-secrets.outputs.skip != 'true'
         run: |
