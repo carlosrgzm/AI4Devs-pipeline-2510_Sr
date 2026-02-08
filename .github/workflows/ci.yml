@@ -1,0 +1,9 @@
+name: CI
+on:
+  push:
+    branches: [main, master]
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Use pipeline.yml for backend workflow"
