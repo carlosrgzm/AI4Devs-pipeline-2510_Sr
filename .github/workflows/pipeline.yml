@@ -63,12 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: backend-build
-          path: |
-            backend/dist
-            backend/node_modules
-            backend/package.json
-            backend/package-lock.json
-            backend/prisma
+          path: backend/
 
   deploy:
     name: Deploy to EC2
@@ -107,5 +102,10 @@ jobs:
           EC2_USER: ${{ secrets.EC2_USER }}
         run: |
           rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" backend/ ${EC2_USER}@${EC2_HOST}:~/backend-app/
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} \
-            "cd ~/backend-app && npm install --production && (pm2 restart backend || pm2 start dist/index.js --name backend)"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} '
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use 20 2>/dev/null
+            cd ~/backend-app
+            npm install --omit=dev
+            (pm2 restart backend 2>/dev/null || pm2 start dist/index.js --name backend)
+          '
