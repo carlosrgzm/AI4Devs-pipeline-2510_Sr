@@ -167,3 +167,18 @@ Documentación de los errores encontrados durante el despliegue y las soluciones
 **Causa:** Jest ejecutaba tanto los tests en `src/` como en `dist/`, y los compilados se comportaban distinto.
 
 **Solución:** Añadir `testPathIgnorePatterns: ['/node_modules/', '/dist/']` en `backend/jest.config.js`.
+
+---
+
+## 9. Archivos `.env` en el repositorio
+
+**Error:** Los archivos `.env` (con credenciales, claves de DB, etc.) estaban siendo commiteados y eran visibles en GitHub.
+
+**Causa:** Las entradas `**/.env` estaban comentadas en `.gitignore` y los archivos ya habían sido añadidos al repositorio.
+
+**Solución:**
+1. Descomentar o añadir `**/.env` en `.gitignore` para ignorar todos los `.env`
+2. Sacar los archivos del tracking de git: `git rm --cached .env backend/.env` (los archivos siguen en disco local)
+3. Commit y push del cambio
+
+**Nota:** Los valores sensibles anteriores siguen en el historial de Git; si había credenciales, conviene rotarlas.
