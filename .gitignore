@@ -1,6 +1,6 @@
 # Ignore in all directories
 **/.DS_Store
-#**/.env
+**/.env
 **/.env.example
 **/node_modules
 **/prompts_master.md
@@ -24,5 +24,3 @@ yarn-error.log*
 # IDE
 .idea
 .vscode
-
-# .env
